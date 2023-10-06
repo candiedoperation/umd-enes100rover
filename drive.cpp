@@ -25,7 +25,10 @@ Drive::Drive(Propel propel) {
   propulsion = propel;
 
   /* Initialize the Pins */
-
+  for (int pin : propel.leftDrivePWM) { pinMode(pin, OUTPUT); }
+  for (int pin : propel.rightDrivePWM) { pinMode(pin, OUTPUT); }
+  for (int pin : propel.leftDriveDirection) { pinMode(pin, OUTPUT); }
+  for (int pin : propel.rightDriveDirection) { pinMode(pin, OUTPUT); }
 }
 
 /* Define Functions */
