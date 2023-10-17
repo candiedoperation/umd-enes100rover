@@ -25,19 +25,41 @@ Drive::Drive(Propel propel) {
   propulsion = propel;
 
   /* Initialize the Pins */
-  for (int pin : propel.leftDrivePWM) { pinMode(pin, OUTPUT); }
-  for (int pin : propel.rightDrivePWM) { pinMode(pin, OUTPUT); }
-  for (int pin : propel.leftDriveDirection) { pinMode(pin, OUTPUT); }
-  for (int pin : propel.rightDriveDirection) { pinMode(pin, OUTPUT); }
+  for (int pin : propulsion.leftDrivePWM) { pinMode(pin, OUTPUT); }
+  for (int pin : propulsion.rightDrivePWM) { pinMode(pin, OUTPUT); }
+  for (int pin : propulsion.leftDriveDirection) { pinMode(pin, OUTPUT); }
+  for (int pin : propulsion.rightDriveDirection) { pinMode(pin, OUTPUT); }
 }
 
 /* Define Functions */
-void Drive::forward(int distance) {
-    /* Copyright (C) 2023  Ishan Desai */
+int parse_pwmp(int percent) {
+  return (((float) (100 - percent) / 100) * 255);
 }
 
-void Drive::backward(int distance) {
+void Drive::forward(int speed) {
+  /* Take Speed as percent of 255 */
+  int pwm_speed = parse_pwmp(speed);
 
+  /* Power Direction Pins */
+  for (int pin : propulsion.leftDriveDirection) { digitalWrite(pin, HIGH); }
+  for (int pin : propulsion.rightDriveDirection) { digitalWrite(pin, HIGH); }
+
+  /* Power Drive Pins */
+  for (int pin : propulsion.leftDrivePWM) { analogWrite(pin, pwm_speed); }
+  for (int pin : propulsion.rightDrivePWM) { analogWrite(pin, pwm_speed); }
+}
+
+void Drive::backward(int speed) {
+  /* Take Speed as percent of 255 */
+  int pwm_speed = parse_pwmp(speed);
+
+  /* Power Direction Pins */
+  for (int pin : propulsion.leftDriveDirection) { digitalWrite(pin, LOW); }
+  for (int pin : propulsion.rightDriveDirection) { digitalWrite(pin, LOW); }
+
+  /* Power Drive Pins */
+  for (int pin : propulsion.leftDrivePWM) { analogWrite(pin, pwm_speed); }
+  for (int pin : propulsion.rightDrivePWM) { analogWrite(pin, pwm_speed); }
 }
 
 void Drive::angled(int theta) {

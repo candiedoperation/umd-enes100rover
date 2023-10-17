@@ -19,6 +19,9 @@
 #include "drive.h";
 
 void setup() {
+  /* Initialize Serial */
+  Serial.begin(9600);
+
   /* Define Propulsion Pins */
   struct Propel propulsion = {
     {10, 11}, //10LF, 11LB
@@ -29,9 +32,10 @@ void setup() {
 
   /* Initialize the Drive Object */
   Drive drive(propulsion);
+  drive.forward(95);
 
   /* Never Return */
   while(1 == 1) {
-
+   
   }
 }
