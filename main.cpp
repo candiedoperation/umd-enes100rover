@@ -16,10 +16,13 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "drive.h";
+/* Include Headers */
+#include "main.h"
+#include "drive.h"
 
-void setup() {
-  /* Initialize Serial */
+/* Define Functions */
+void Main::initialize() {
+/* Initialize Serial */
   Serial.begin(9600);
 
   /* Define Propulsion Pins */
@@ -34,8 +37,7 @@ void setup() {
   Drive drive(propulsion);
   drive.forward(95);
 
-  /* Never Return */
-  while(1 == 1) {
-   
+  while (1 == 1) {
+    /* Perform Infinite Loop */
   }
 }
