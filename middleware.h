@@ -16,20 +16,17 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef navigate_h
-#define navigate_h
+#ifndef middleware_h
+#define middleware_h
 
 /* Include Required Libraries */
 #include <Arduino.h>
 
-/* Define Required Strcuts */
-struct Vision {
-  
-}
-
-/* Define Class */
-class Navigate {
-
+/* Define Classes */
+class Middleware {
+  public:
+    long ulsonic_parse(); /* Converts Ultrasonic ms to inches */
+    int pwmp_parse(); /* Converts % speeds to PWM Values */
 };
 
 #endif

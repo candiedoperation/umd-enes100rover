@@ -18,6 +18,7 @@
 
 /* Include Headers */
 #include "drive.h"
+#include "middleware.h"
 
 /* Constructor */
 Drive::Drive(Propel propel) {
@@ -31,14 +32,10 @@ Drive::Drive(Propel propel) {
   for (int pin : propulsion.rightDriveDirection) { pinMode(pin, OUTPUT); }
 }
 
-/* Define Functions */
-int parse_pwmp(int percent) {
-  return (((float) (100 - percent) / 100) * 255);
-}
-
 void Drive::forward(int speed) {
   /* Take Speed as percent of 255 */
-  int pwm_speed = parse_pwmp(speed);
+  Middleware middleware;
+  int pwm_speed = middleware.parse_pwmp(speed);
 
   /* Power Direction Pins */
   for (int pin : propulsion.leftDriveDirection) { digitalWrite(pin, HIGH); }
@@ -51,7 +48,8 @@ void Drive::forward(int speed) {
 
 void Drive::backward(int speed) {
   /* Take Speed as percent of 255 */
-  int pwm_speed = parse_pwmp(speed);
+  Middleware middleware;
+  int pwm_speed = middleware.parse_pwmp(speed);
 
   /* Power Direction Pins */
   for (int pin : propulsion.leftDriveDirection) { digitalWrite(pin, LOW); }

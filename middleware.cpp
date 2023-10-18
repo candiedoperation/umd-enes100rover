@@ -16,20 +16,23 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef navigate_h
-#define navigate_h
+/* Include Headers */
+#include "middleware.h"
 
-/* Include Required Libraries */
-#include <Arduino.h>
+/* Define Functions */
+long Middleware::ulsonic_parse(long ms) {
+  /*
+    See: https://www.parallax.com/package/ping-ultrasonic-distance-sensor-downloads/
+    According to Parallax's datasheet for the PING))), there are 73.746
+    microseconds per inch (i.e. sound travels at 1130 feet per second).
+    This gives the distance travelled by the ping, outbound and return,
+    so we divide by 2 to get the distance of the obstacle.
+  */
 
-/* Define Required Strcuts */
-struct Vision {
-  
+  return (ms / 74 / 2);
 }
 
-/* Define Class */
-class Navigate {
-
-};
-
-#endif
+int Middleware::pwmp_parse(int percent) {
+  /* Convert a percent speed value to PWM 0 - 255 range */
+  return (((float) (100 - percent) / 100) * 255);
+}
