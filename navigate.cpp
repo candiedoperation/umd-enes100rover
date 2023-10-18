@@ -15,3 +15,22 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+
+#include "navigate.h"
+
+/* Define Constrcutors */
+Navigate::Navigate(Vision vision_obj) {
+  /* Update the Instance Variable */
+  vision = vision_obj;
+
+  /* Initialize the Pins */
+  for (int *sensor : vision.ulsonic_pins) {
+    /* Pins and Pwr */
+    pinMode(sensor[0], OUTPUT);
+    digitalWrite(sensor[0], HIGH);
+    
+    /* Tx, Rx */
+    pinMode(sensor[1], OUTPUT);
+    pinMode(sensor[2], INPUT);
+  }
+}

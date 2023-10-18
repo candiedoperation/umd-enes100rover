@@ -24,12 +24,18 @@
 
 /* Define Required Strcuts */
 struct Vision {
-  
-}
+  /* ulsonic_pins: [Sensor Count][Pwr, Tx, Rx] */
+  int ulsonic_pins[1][3];
+};
 
 /* Define Class */
 class Navigate {
-
+  private:
+    Vision vision;
+  
+  public:
+    Navigate(Vision vision_obj);
+    long ulsonic_ping(int sensor_index);
 };
 
 #endif

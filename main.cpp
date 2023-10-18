@@ -19,6 +19,7 @@
 /* Include Headers */
 #include "main.h"
 #include "drive.h"
+#include "navigate.h"
 
 /* Define Functions */
 void Main::initialize() {
@@ -33,9 +34,17 @@ void Main::initialize() {
     {8, 9} //8RF, 9RB
   };
 
+  /* Define Vision Data */
+  struct Vision vision = {
+    {{19, 20, 21}},
+  };
+
   /* Initialize the Drive Object */
   Drive drive(propulsion);
-  drive.forward(95);
+  drive.forward(98);
+
+  /* Initialize Navigation */
+  Navigate navigate(vision);
 
   while (1 == 1) {
     /* Perform Infinite Loop */

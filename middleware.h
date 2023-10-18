@@ -25,8 +25,8 @@
 /* Define Classes */
 class Middleware {
   public:
-    long ulsonic_parse(); /* Converts Ultrasonic ms to inches */
-    int pwmp_parse(); /* Converts % speeds to PWM Values */
+    long ulsonic_parse(long ms); /* Converts Ultrasonic ms to inches */
+    int pwmp_parse(int percent); /* Converts % speeds to PWM Values */
 };
 
 #endif

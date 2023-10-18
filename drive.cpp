@@ -35,7 +35,7 @@ Drive::Drive(Propel propel) {
 void Drive::forward(int speed) {
   /* Take Speed as percent of 255 */
   Middleware middleware;
-  int pwm_speed = middleware.parse_pwmp(speed);
+  int pwm_speed = middleware.pwmp_parse(speed);
 
   /* Power Direction Pins */
   for (int pin : propulsion.leftDriveDirection) { digitalWrite(pin, HIGH); }
@@ -49,7 +49,7 @@ void Drive::forward(int speed) {
 void Drive::backward(int speed) {
   /* Take Speed as percent of 255 */
   Middleware middleware;
-  int pwm_speed = middleware.parse_pwmp(speed);
+  int pwm_speed = middleware.pwmp_parse(speed);
 
   /* Power Direction Pins */
   for (int pin : propulsion.leftDriveDirection) { digitalWrite(pin, LOW); }
