@@ -41,12 +41,14 @@ void Main::initialize() {
 
   /* Initialize the Drive Object */
   Drive drive(propulsion);
-  drive.forward(98);
+  drive.forward(10);
 
   /* Initialize Navigation */
   Navigate navigate(vision);
 
   while (1 == 1) {
     /* Perform Infinite Loop */
+    if (navigate.ulsonic_ping(0) < 5) drive.brake();
+    else drive.forward(10);
   }
 }

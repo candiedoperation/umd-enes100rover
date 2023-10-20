@@ -38,6 +38,7 @@ class Drive {
 
   public:
     Drive(Propel propulsion);
+    void brake();
     void forward(int distance);
     void backward(int distance);
     void angled(int theta);

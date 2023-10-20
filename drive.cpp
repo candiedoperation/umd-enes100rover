@@ -32,6 +32,12 @@ Drive::Drive(Propel propel) {
   for (int pin : propulsion.rightDriveDirection) { pinMode(pin, OUTPUT); }
 }
 
+void Drive::brake() {
+  /* Cut Power to All Drive Pins */
+  for (int pin : propulsion.leftDrivePWM) { digitalWrite(pin, LOW); }
+  for (int pin : propulsion.rightDrivePWM) { digitalWrite(pin, LOW); }
+}
+
 void Drive::forward(int speed) {
   /* Take Speed as percent of 255 */
   Middleware middleware;

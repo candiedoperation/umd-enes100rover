@@ -17,6 +17,7 @@
 */
 
 #include "navigate.h"
+#include "middleware.h"
 
 /* Define Constrcutors */
 Navigate::Navigate(Vision vision_obj) {
@@ -33,4 +34,21 @@ Navigate::Navigate(Vision vision_obj) {
     pinMode(sensor[1], OUTPUT);
     pinMode(sensor[2], INPUT);
   }
+}
+
+long Navigate::ulsonic_ping(int sensor_index) {
+  /* Get Sensor Pwr, Tx, Rx Pins from Vision Struct */
+  Middleware middleware;
+  int *sensor = vision.ulsonic_pins[sensor_index];
+  
+  /* Trigger Ultrasonic Sensor Pins */
+  digitalWrite(sensor[1], LOW);
+  delayMicroseconds(2);
+  digitalWrite(sensor[1], HIGH);
+  delayMicroseconds(10);
+  digitalWrite(sensor[1], LOW);
+
+  /* Read Duration and return Distance */
+  long duration = pulseIn(sensor[2], HIGH);
+  return middleware.ulsonic_parse(duration);
 }

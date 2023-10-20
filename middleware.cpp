@@ -34,5 +34,5 @@ long Middleware::ulsonic_parse(long ms) {
 
 int Middleware::pwmp_parse(int percent) {
   /* Convert a percent speed value to PWM 0 - 255 range */
-  return (((float) (100 - percent) / 100) * 255);
+  return (((float) percent / 100) * 255);
 }
