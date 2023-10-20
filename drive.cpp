@@ -44,8 +44,10 @@ void Drive::forward(int speed) {
   int pwm_speed = middleware.pwmp_parse(speed);
 
   /* Power Direction Pins */
-  for (int pin : propulsion.leftDriveDirection) { digitalWrite(pin, HIGH); }
-  for (int pin : propulsion.rightDriveDirection) { digitalWrite(pin, HIGH); }
+  digitalWrite(propulsion.leftDriveDirection[0], LOW);
+  digitalWrite(propulsion.rightDriveDirection[0], HIGH);
+  digitalWrite(propulsion.leftDriveDirection[1], LOW);
+  digitalWrite(propulsion.rightDriveDirection[1], HIGH);
 
   /* Power Drive Pins */
   for (int pin : propulsion.leftDrivePWM) { analogWrite(pin, pwm_speed); }
@@ -58,8 +60,10 @@ void Drive::backward(int speed) {
   int pwm_speed = middleware.pwmp_parse(speed);
 
   /* Power Direction Pins */
-  for (int pin : propulsion.leftDriveDirection) { digitalWrite(pin, LOW); }
-  for (int pin : propulsion.rightDriveDirection) { digitalWrite(pin, LOW); }
+  digitalWrite(propulsion.leftDriveDirection[0], HIGH);
+  digitalWrite(propulsion.rightDriveDirection[0], LOW);
+  digitalWrite(propulsion.leftDriveDirection[1], HIGH);
+  digitalWrite(propulsion.rightDriveDirection[1], LOW);
 
   /* Power Drive Pins */
   for (int pin : propulsion.leftDrivePWM) { analogWrite(pin, pwm_speed); }
