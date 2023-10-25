@@ -23,6 +23,7 @@
 /* Constructor */
 Drive::Drive(Propel propel) {
   /* Update the Private Propulsion Object */
+  Middleware middleware;
   propulsion = propel;
 
   /* Initialize the Pins */
@@ -34,13 +35,12 @@ Drive::Drive(Propel propel) {
 
 void Drive::brake() {
   /* Cut Power to All Drive Pins */
-  for (int pin : propulsion.leftDrivePWM) { digitalWrite(pin, LOW); }
-  for (int pin : propulsion.rightDrivePWM) { digitalWrite(pin, LOW); }
+  for (int pin : propulsion.leftDrivePWM) { analogWrite(pin, middleware.pwmp_parse(0)); }
+  for (int pin : propulsion.rightDrivePWM) { digitalWrite(pin, middleware.pwmp_parse(0)); }
 }
 
 void Drive::forward(int speed) {
   /* Take Speed as percent of 255 */
-  Middleware middleware;
   int pwm_speed = middleware.pwmp_parse(speed);
 
   /* Power Direction Pins */
@@ -56,7 +56,6 @@ void Drive::forward(int speed) {
 
 void Drive::backward(int speed) {
   /* Take Speed as percent of 255 */
-  Middleware middleware;
   int pwm_speed = middleware.pwmp_parse(speed);
 
   /* Power Direction Pins */
@@ -71,5 +70,21 @@ void Drive::backward(int speed) {
 }
 
 void Drive::angled(int theta) {
+  /* This Function needs to be calibrated based on use Case */
+  
+  /* Calibrate the PWM % to requirement. For us -> 90deg is 1680ms. 1deg = 18.666ms (turn_factor) */
+  const long TURN_CALIBRATION = 18.6667; 
+  int pwm_speed = middleware.pwmp_parse(30);
 
+  /* Power Direction Pins */
+  for (int pin : propulsion.leftDriveDirection) { pinMode(pin, (theta > 0) ? LOW : HIGH); }
+  for (int pin : propulsion.rightDriveDirection) { pinMode(pin, (theta > 0) ? LOW : HIGH); }
+
+  /* Power Drive Pins */
+  for (int pin : propulsion.leftDrivePWM) { analogWrite(pin, pwm_speed); }
+  for (int pin : propulsion.rightDrivePWM) { analogWrite(pin, pwm_speed); }
+
+  /* Stop Driving after Turn Completion */
+  delay(TURN_CALIBRATION * abs(theta));
+  this->brake();
 }

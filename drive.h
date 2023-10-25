@@ -22,6 +22,7 @@
 
 /* Include Required Libraries */
 #include <Arduino.h>
+#include "middleware.h"
 
 /* Define Structs */
 struct Propel {
@@ -35,6 +36,7 @@ struct Propel {
 class Drive {
   private:
     Propel propulsion;
+    Middleware middleware;
 
   public:
     Drive(Propel propulsion);
