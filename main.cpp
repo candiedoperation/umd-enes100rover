@@ -17,9 +17,9 @@
 */
 
 /* Include Headers */
-#include "main.h"
-#include "drive.h"
-#include "navigate.h"
+#include "main.hpp"
+#include "drive.hpp"
+#include "navigate.hpp"
 #include <Servo.h>
 
 /* Define Functions */

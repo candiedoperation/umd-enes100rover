@@ -14,20 +14,30 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/ 
+*/
 
-/* Header Definition */
-#ifndef main_h
-#define main_h
+#ifndef navigate_hpp
+#define navigate_hpp
 
 /* Include Required Libraries */
 #include <Arduino.h>
+#include <Servo.h>
 
-/* Define Classes */
-class Main {
+/* Define Required Strcuts */
+struct Vision {
+  /* ulsonic_pins: [Sensor Count][Pwr, Tx, Rx] */
+  int ulsonic_pins[1][3];
+  Servo ulsonic_sweep;
+};
+
+/* Define Class */
+class Navigate {
+  private:
+    Vision vision;
+  
   public:
-    Main;
-    void initialize();
+    Navigate(Vision vision_obj);
+    long ulsonic_ping(int sensor_index);
 };
 
 #endif

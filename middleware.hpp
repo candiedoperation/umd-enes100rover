@@ -16,34 +16,17 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-/* Header Definition */
-#ifndef drive_h
-#define drive_h
+#ifndef middleware_hpp
+#define middleware_hpp
 
 /* Include Required Libraries */
 #include <Arduino.h>
-#include "middleware.h"
-
-/* Define Structs */
-struct Propel {
-  int leftDrivePWM[2];
-  int leftDriveDirection[2];
-  int rightDrivePWM[2];
-  int rightDriveDirection[2];
-};
 
 /* Define Classes */
-class Drive {
-  private:
-    Propel propulsion;
-    Middleware middleware;
-
+class Middleware {
   public:
-    Drive(Propel propulsion);
-    void brake();
-    void forward(int distance);
-    void backward(int distance);
-    void angled(int theta);
+    long ulsonic_parse(long ms); /* Converts Ultrasonic ms to inches */
+    int pwmp_parse(int percent); /* Converts % speeds to PWM Values */
 };
 
 #endif

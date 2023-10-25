@@ -17,7 +17,7 @@
 */
 
 /* Include Headers */
-#include "middleware.h"
+#include "middleware.hpp"
 
 /* Define Functions */
 long Middleware::ulsonic_parse(long ms) {

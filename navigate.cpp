@@ -16,8 +16,8 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "navigate.h"
-#include "middleware.h"
+#include "navigate.hpp"
+#include "middleware.hpp"
 
 /* Define Constrcutors */
 Navigate::Navigate(Vision vision_obj) {

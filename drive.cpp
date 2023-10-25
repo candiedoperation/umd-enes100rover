@@ -17,8 +17,8 @@
 */
 
 /* Include Headers */
-#include "drive.h"
-#include "middleware.h"
+#include "drive.hpp"
+#include "middleware.hpp"
 
 /* Constructor */
 Drive::Drive(Propel propel) {
