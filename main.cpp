@@ -20,6 +20,8 @@
 #include "main.hpp"
 #include "drive.hpp"
 #include "navigate.hpp"
+#include "remote.hpp"
+#include "Enes100.h"
 #include <Servo.h>
 
 /* Define Functions */
@@ -35,6 +37,19 @@ void Main::initialize() {
     {8, 9} //8RF, 9RB
   };
   
+  /* Define Origin Data */
+  struct Origin origin = {
+    "ENES100 Data Team",
+    DATA,
+    12, /* 58 is the Mascot */
+    52,
+    50
+  };
+
+  /* Initialize Remote */
+  Remote remote(origin);
+  remote.getBackend().println("Hello! I'm Ein, the Data Dog!");
+
   /* Define Ultrasonic Sweep servo on Pin 2 */
   Servo ulsonic_sweep;
   ulsonic_sweep.attach(2);
@@ -42,26 +57,27 @@ void Main::initialize() {
   /* Define Vision Data */
   struct Vision vision = {
     {{19, 20, 21}},
-    ulsonic_sweep
+    ulsonic_sweep,
+    NULL
   };
-
-  /* Initialize the Drive Object */
-  Drive drive(propulsion);
-  //drive.forward(40);
-  drive.angled(-45);
 
   /* Initialize Navigation */
   Navigate navigate(vision);
 
+  /* Initialize the Drive Object */
+  Drive drive(propulsion);
+  //drive.forward(40);
+  //drive.angled(-45);
+
   while (1 == 1) {
-    /*long dist = navigate.ulsonic_ping(0);
-    Serial.println(dist);
+    navigate.ulsonic_ping(0);
+    /*Serial.println(dist);
     if (dist < 10) {
       drive.brake();
     } else {
       drive.forward(40);
-    }
+    }*/
     
-    delay(300);*/
+    delay(300);
   }
 }

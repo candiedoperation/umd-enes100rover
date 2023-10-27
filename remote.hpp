@@ -16,3 +16,31 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#ifndef remote_hpp
+#define remote_hpp
+
+/* Include Required Libraries */
+#include <Arduino.h>
+#include "VisionSystemClient.hpp"
+
+/* Define Required Structs */
+struct Origin {
+  char* team_name; // Team Name
+  byte team_type; // Team Project
+  int aruco_marker; // Aruco Marker Number
+  int wifi_tx; // Wi-Fi Module Transmit Pin
+  int wifi_rx; // Wi-Fi Module Receive Pin
+};
+
+class Remote {
+  private:
+    VisionSystemClient vision_system;
+    Origin origin;
+
+  public:
+    /* Define the Constructor */
+    Remote(Origin origin_obj);
+    VisionSystemClient getBackend();
+};
+
+#endif

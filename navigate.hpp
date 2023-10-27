@@ -22,12 +22,14 @@
 /* Include Required Libraries */
 #include <Arduino.h>
 #include <Servo.h>
+#include "remote.hpp"
 
 /* Define Required Strcuts */
 struct Vision {
   /* ulsonic_pins: [Sensor Count][Pwr, Tx, Rx] */
   int ulsonic_pins[1][3];
   Servo ulsonic_sweep;
+  Remote* remote;
 };
 
 /* Define Class */
@@ -38,6 +40,7 @@ class Navigate {
   public:
     Navigate(Vision vision_obj);
     long ulsonic_ping(int sensor_index);
+    void mission_site();
 };
 
 #endif

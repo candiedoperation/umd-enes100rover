@@ -16,3 +16,30 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+/* Include Headers */
+#include "remote.hpp"
+
+Remote::Remote(Origin origin_obj) {
+  /* Update Instance Variables */
+  origin = origin_obj;
+  
+  /* Initialize Pins */
+  pinMode(origin.wifi_tx, OUTPUT);
+  pinMode(origin.wifi_rx, INPUT);
+
+  /* Connect to Backend */
+  vision_system.begin(
+    origin.team_name, 
+    origin.team_type, 
+    origin.aruco_marker, 
+    origin.wifi_tx, 
+    origin.wifi_rx
+  );
+
+  /* We're Connected! */
+  Serial.println("wtf?");
+};
+
+VisionSystemClient Remote::getBackend() {
+  return vision_system;
+};

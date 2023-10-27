@@ -41,7 +41,7 @@ long Navigate::ulsonic_ping(int sensor_index) {
   Middleware middleware;
   int *sensor = vision.ulsonic_pins[sensor_index];
   
-  /*for (int pos = 0; pos <= 180; pos += 1) { // goes from 0 degrees to 180 degrees
+  for (int pos = 0; pos <= 180; pos += 1) { // goes from 0 degrees to 180 degrees
     // in steps of 1 degree
     vision.ulsonic_sweep.write(pos);              // tell servo to go to position in variable 'pos'
     delay(5);                       // waits 15ms for the servo to reach the position
@@ -52,7 +52,7 @@ long Navigate::ulsonic_ping(int sensor_index) {
   for (int pos = 180; pos >= 0; pos -= 1) { // goes from 180 degrees to 0 degrees
     vision.ulsonic_sweep.write(pos);              // tell servo to go to position in variable 'pos'
     delay(5);                       // waits 15ms for the servo to reach the position
-  }*/
+  }
 
   /* Trigger Ultrasonic Sensor Pins */
   digitalWrite(sensor[1], LOW);
@@ -64,4 +64,8 @@ long Navigate::ulsonic_ping(int sensor_index) {
   /* Read Duration and return Distance */
   long duration = pulseIn(sensor[2], HIGH);
   return middleware.ulsonic_parse(duration);
+}
+
+void mission_site() {
+  
 }
