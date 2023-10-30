@@ -32,6 +32,12 @@ struct Origin {
   int wifi_rx; // Wi-Fi Module Receive Pin
 };
 
+struct RemoteCoords {
+  float X;
+  float Y;
+  float XY;
+};
+
 class Remote {
   private:
     VisionSystemClient vision_system;
@@ -40,7 +46,7 @@ class Remote {
   public:
     /* Define the Constructor */
     Remote(Origin origin_obj);
-    VisionSystemClient getBackend();
+    VisionSystemClient* getBackend();
 };
 
 #endif

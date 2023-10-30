@@ -37,9 +37,9 @@ Remote::Remote(Origin origin_obj) {
   );
 
   /* We're Connected! */
-  Serial.println("wtf?");
+  //Serial.println("wtf?");
 };
 
-VisionSystemClient Remote::getBackend() {
-  return vision_system;
+VisionSystemClient* Remote::getBackend() {
+  return &vision_system;
 };

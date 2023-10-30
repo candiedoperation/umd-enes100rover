@@ -27,7 +27,7 @@
 /* Define Functions */
 void Main::initialize() {
   /* Initialize Serial */
-  Serial.begin(9600);
+  //Serial.begin(9600);
 
   /* Define Propulsion Pins */
   struct Propel propulsion = {
@@ -48,7 +48,7 @@ void Main::initialize() {
 
   /* Initialize Remote */
   Remote remote(origin);
-  remote.getBackend().println("Hello! I'm Ein, the Data Dog!");
+  remote.getBackend()->println("Hello! I'm Ein, the Data Dog!");
 
   /* Define Ultrasonic Sweep servo on Pin 2 */
   Servo ulsonic_sweep;
@@ -68,9 +68,11 @@ void Main::initialize() {
   Drive drive(propulsion);
   //drive.forward(40);
   //drive.angled(-45);
+  navigate.mission_site(&remote, &drive);
 
   while (1 == 1) {
     navigate.ulsonic_ping(0);
+
     /*Serial.println(dist);
     if (dist < 10) {
       drive.brake();

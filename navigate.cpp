@@ -16,8 +16,11 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include "drive.hpp"
+#include "remote.hpp"
 #include "navigate.hpp"
 #include "middleware.hpp"
+#include "VisionSystemClient.hpp"
 
 /* Define Constrcutors */
 Navigate::Navigate(Vision vision_obj) {
@@ -66,6 +69,33 @@ long Navigate::ulsonic_ping(int sensor_index) {
   return middleware.ulsonic_parse(duration);
 }
 
-void mission_site() {
+RemoteCoords Navigate::get_position(Remote *remote) {
+  /* Uses the Remote Backend to get X, Y, Theta */
+  RemoteCoords rmc;
+  rmc.X = remote->getBackend()->getX();
+  rmc.Y = remote->getBackend()->getY();
+  rmc.XY = (remote->getBackend()->getTheta()) * 57.2958; /* Convert Rads to Degrees */
+  return rmc;
+}
+
+void Navigate::mission_site(Remote *remote, Drive *drive) {
+  /*
+    According to the Mission Specifications,
+    Position straight by Turning (Theta - 0)
+    if the Y Coordinate is < 1.00, go Left
+    if the Y Coordinate is > 1.00, go Right
+  */
+
+  /* Get Coordinate Information for Remote */
+  RemoteCoords rmc = this->get_position(remote);
+
+  /* Orient Straight */
+  drive->angled(rmc.XY - 0);
   
+  /* Orient to Mission Site */
+  if (rmc.Y < 1.00) {
+    //Serial.println("Go Left");
+  } else {
+    //Serial.println("Go Right");
+  }
 }

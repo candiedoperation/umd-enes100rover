@@ -40,7 +40,8 @@ class Navigate {
   public:
     Navigate(Vision vision_obj);
     long ulsonic_ping(int sensor_index);
-    void mission_site();
+    RemoteCoords get_position(Remote *remote);
+    void mission_site(Remote *remote, Drive *drive);
 };
 
 #endif
