@@ -27,7 +27,7 @@
 /* Define Functions */
 void Main::initialize() {
   /* Initialize Serial */
-  //Serial.begin(9600);
+  Serial.begin(9600);
 
   /* Define Propulsion Pins */
   struct Propel propulsion = {
@@ -39,16 +39,12 @@ void Main::initialize() {
   
   /* Define Origin Data */
   struct Origin origin = {
-    "ENES100 Data Team",
+    "Ein, the Data Dog!",
     DATA,
-    12, /* 58 is the Mascot */
+    205, /* 58 is the Mascot */
     52,
     50
   };
-
-  /* Initialize Remote */
-  Remote remote(origin);
-  remote.getBackend()->println("Hello! I'm Ein, the Data Dog!");
 
   /* Define Ultrasonic Sweep servo on Pin 2 */
   Servo ulsonic_sweep;
@@ -68,6 +64,12 @@ void Main::initialize() {
   Drive drive(propulsion);
   //drive.forward(40);
   //drive.angled(-45);
+
+  /* Initialize Remote */
+  Remote remote(origin, &Enes100);
+  Enes100.println("Hello! I'm Ein, the Data Dog!");
+
+  /* Initialize Navigation */
   navigate.mission_site(&remote, &drive);
 
   while (1 == 1) {

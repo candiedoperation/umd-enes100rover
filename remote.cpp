@@ -19,8 +19,9 @@
 /* Include Headers */
 #include "remote.hpp"
 
-Remote::Remote(Origin origin_obj) {
-  /* Update Instance Variables */
+Remote::Remote(Origin origin_obj, VisionSystemClient *backend_ref) {
+  /* Update Instance Variables */;
+  backend = backend_ref;
   origin = origin_obj;
   
   /* Initialize Pins */
@@ -28,7 +29,7 @@ Remote::Remote(Origin origin_obj) {
   pinMode(origin.wifi_rx, INPUT);
 
   /* Connect to Backend */
-  vision_system.begin(
+  backend->begin(
     origin.team_name, 
     origin.team_type, 
     origin.aruco_marker, 
@@ -37,9 +38,5 @@ Remote::Remote(Origin origin_obj) {
   );
 
   /* We're Connected! */
-  //Serial.println("wtf?");
-};
-
-VisionSystemClient* Remote::getBackend() {
-  return &vision_system;
+  Serial.println("wtf?");
 };

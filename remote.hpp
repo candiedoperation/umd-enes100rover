@@ -40,13 +40,12 @@ struct RemoteCoords {
 
 class Remote {
   private:
-    VisionSystemClient vision_system;
     Origin origin;
 
   public:
     /* Define the Constructor */
-    Remote(Origin origin_obj);
-    VisionSystemClient* getBackend();
+    Remote(Origin origin_obj, VisionSystemClient *backend_ref);
+    VisionSystemClient *backend;
 };
 
 #endif

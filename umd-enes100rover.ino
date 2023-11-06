@@ -23,3 +23,7 @@ void setup() {
   Main main;
   main.initialize();
 }
+
+void loop() {
+  
+}
