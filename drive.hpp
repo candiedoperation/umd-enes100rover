@@ -43,7 +43,7 @@ class Drive {
     void brake();
     void forward(int distance);
     void backward(int distance);
-    void angled(int theta);
+    void angled(float theta);
 };
 
 #endif

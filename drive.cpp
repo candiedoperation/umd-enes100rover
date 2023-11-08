@@ -27,8 +27,8 @@ Drive::Drive(Propel propel) {
   propulsion = propel;
 
   /* Initialize the Pins */
-  for (int pin : propulsion.leftDrivePWM) { pinMode(pin, OUTPUT); }
-  for (int pin : propulsion.rightDrivePWM) { pinMode(pin, OUTPUT); }
+  for (int pin : propulsion.leftDrivePWM) { pinMode(pin, OUTPUT); analogWrite(pin, middleware.pwmp_parse(0)); }
+  for (int pin : propulsion.rightDrivePWM) { pinMode(pin, OUTPUT); analogWrite(pin, middleware.pwmp_parse(0)); }
   for (int pin : propulsion.leftDriveDirection) { pinMode(pin, OUTPUT); }
   for (int pin : propulsion.rightDriveDirection) { pinMode(pin, OUTPUT); }
 }
@@ -36,7 +36,7 @@ Drive::Drive(Propel propel) {
 void Drive::brake() {
   /* Cut Power to All Drive Pins */
   for (int pin : propulsion.leftDrivePWM) { analogWrite(pin, middleware.pwmp_parse(0)); }
-  for (int pin : propulsion.rightDrivePWM) { digitalWrite(pin, middleware.pwmp_parse(0)); }
+  for (int pin : propulsion.rightDrivePWM) { analogWrite(pin, middleware.pwmp_parse(0)); }
 }
 
 void Drive::forward(int speed) {
@@ -69,16 +69,16 @@ void Drive::backward(int speed) {
   for (int pin : propulsion.rightDrivePWM) { analogWrite(pin, pwm_speed); }
 }
 
-void Drive::angled(int theta) {
+void Drive::angled(float theta) {
   /* This Function needs to be calibrated based on use Case */
   
-  /* Calibrate the PWM % to requirement. For us -> 90deg is 1680ms. 1deg = 18.666ms (turn_factor) */
-  const long TURN_CALIBRATION = 18.6667; 
+  /* Calibrate the PWM % to requirement. For us -> 90deg is 2020ms. 1deg = 22.444444ms (turn_factor) */
+  const long TURN_CALIBRATION = 22.444444; 
   int pwm_speed = middleware.pwmp_parse(30);
 
   /* Power Direction Pins */
-  for (int pin : propulsion.leftDriveDirection) { pinMode(pin, (theta > 0) ? LOW : HIGH); }
-  for (int pin : propulsion.rightDriveDirection) { pinMode(pin, (theta > 0) ? LOW : HIGH); }
+  for (int pin : propulsion.leftDriveDirection) { pinMode(pin, (theta > 0) ? HIGH : LOW); }
+  for (int pin : propulsion.rightDriveDirection) { pinMode(pin, (theta > 0) ? HIGH : LOW); }
 
   /* Power Drive Pins */
   for (int pin : propulsion.leftDrivePWM) { analogWrite(pin, pwm_speed); }

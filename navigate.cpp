@@ -75,6 +75,7 @@ RemoteCoords Navigate::get_position(Remote *remote) {
   rmc.X = remote->backend->getX();
   rmc.Y = remote->backend->getY();
   rmc.XY = (remote->backend->getTheta()) * 57.2958; /* Convert Rads to Degrees */
+
   return rmc;
 }
 
@@ -88,13 +89,14 @@ void Navigate::mission_site(Remote *remote, Drive *drive) {
 
   /* Define Regime Coordinates */
   const float BEGIN_XCOORD = 0.53;
-  
+
   /* Orient to Mission Site */
   if (this->get_position(remote).X < (BEGIN_XCOORD + 0.2) || this->get_position(remote).X > (BEGIN_XCOORD - 0.2)) {
     /* We are within 0.2 of the Begin Line, Orient Straight */
-    drive->angled(this->get_position(remote).XY - 0);
+    drive->angled(this->get_position(remote).XY);
 
     /* Mission site is opposite to begin Point */
+    delay(250);
     if (this->get_position(remote).Y < 1.00) {
         Serial.println("Go Left");
         drive->angled(-90);

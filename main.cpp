@@ -41,7 +41,7 @@ void Main::initialize() {
   struct Origin origin = {
     "Ein, the Data Dog!",
     DATA,
-    205, /* 58 is the Mascot */
+    10, /* 58 is the Mascot */
     52,
     50
   };
@@ -62,18 +62,17 @@ void Main::initialize() {
 
   /* Initialize the Drive Object */
   Drive drive(propulsion);
-  //drive.forward(40);
-  //drive.angled(-45);
 
   /* Initialize Remote */
   Remote remote(origin, &Enes100);
   Enes100.println("Hello! I'm Ein, the Data Dog!");
 
   /* Initialize Navigation */
+  delay(800);
   navigate.mission_site(&remote, &drive);
 
   while (1 == 1) {
-    navigate.ulsonic_ping(0);
+    //navigate.ulsonic_ping(0);
 
     /*Serial.println(dist);
     if (dist < 10) {
