@@ -41,7 +41,7 @@ void Main::initialize() {
   struct Origin origin = {
     "Ein, the Data Dog!",
     DATA,
-    10, /* 58 is the Mascot */
+    5, /* 58 is the Mascot */
     52,
     50
   };

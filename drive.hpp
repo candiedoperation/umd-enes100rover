@@ -44,6 +44,10 @@ class Drive {
     void forward(int distance);
     void backward(int distance);
     void angled(float theta);
+
+    /* Side Skid Functions */
+    void backright();
+    void frontright();
 };
 
 #endif

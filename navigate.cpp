@@ -96,7 +96,7 @@ void Navigate::mission_site(Remote *remote, Drive *drive) {
     drive->angled(this->get_position(remote).XY);
 
     /* Mission site is opposite to begin Point */
-    delay(250);
+    delay(350);
     if (this->get_position(remote).Y < 1.00) {
         Serial.println("Go Left");
         drive->angled(-90);
@@ -105,12 +105,29 @@ void Navigate::mission_site(Remote *remote, Drive *drive) {
         drive->angled(90);
     }
 
+    /* Align to Centerline */
+    delay(350);
+    if (this->get_position(remote).X < 0.53) {
+      /* Skid Right */
+      while (this->get_position(remote).X > 0.52 && this->get_position(remote).X < 0.54) {
+        drive->backright();
+        while (this->get_position(remote).XY < 0.5 && this->get_position(remote).XY > 0.5) {
+          /* Turn to Adjust Rear Skid */
+          drive->frontright();
+          delay(150);
+        }
+      }
+    } else if (this->get_position(remote).X > 0.53) {
+      /* Skid Left */
+    }
+
     /* Move to Mission Site */
-    /*while (this->get_position(remote).Y < 1.2) {
-      drive->forward(20);
+    delay(350);
+    while (this->get_position(remote).Y < 1.14) {
+      drive->forward(15);
       delay(150);
       drive->brake();
-    }*/
+    }
 
     /* Orient Straight, facing Concrete Blocks */
     //drive->angled(this->get_position(remote).XY - 0);
