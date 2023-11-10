@@ -109,9 +109,9 @@ void Navigate::mission_site(Remote *remote, Drive *drive) {
     delay(350);
     if (this->get_position(remote).X < 0.53) {
       /* Skid Right */
-      while (this->get_position(remote).X > 0.52 && this->get_position(remote).X < 0.54) {
+      while (this->get_position(remote).X < 0.52 || this->get_position(remote).X > 0.54) {
         drive->backright();
-        while (this->get_position(remote).XY < 0.5 && this->get_position(remote).XY > 0.5) {
+        while (this->get_position(remote).XY > 0.5 || this->get_position(remote).XY < 0.5) {
           /* Turn to Adjust Rear Skid */
           drive->frontright();
           delay(150);
