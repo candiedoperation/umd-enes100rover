@@ -69,34 +69,6 @@ void Drive::backward(int speed) {
   for (int pin : propulsion.rightDrivePWM) { analogWrite(pin, pwm_speed); }
 }
 
-void Drive::frontright() {
-  /* Power Direction Pins */
-  digitalWrite(propulsion.leftDriveDirection[0], LOW);
-  digitalWrite(propulsion.rightDriveDirection[0], LOW);
-
-  /* Power Front Drive Pins */
-  analogWrite(propulsion.leftDrivePWM[0], middleware.pwmp_parse(30));
-  analogWrite(propulsion.rightDrivePWM[0], middleware.pwmp_parse(30));
-
-  /* Wait for Movement */
-  delay(250);
-  this->brake();
-}
-
-void Drive::backright() {
-  /* Power Direction Pins */
-  digitalWrite(propulsion.leftDriveDirection[1], LOW);
-  digitalWrite(propulsion.rightDriveDirection[1], LOW);
-
-  /* Power Back Drive Pins */
-  analogWrite(propulsion.leftDrivePWM[1], middleware.pwmp_parse(30));
-  analogWrite(propulsion.rightDrivePWM[1], middleware.pwmp_parse(30));
-
-  /* Wait for Movement */
-  delay(250);
-  this->brake();
-}
-
 void Drive::angled(float theta) {
   /* This Function needs to be calibrated based on use Case */
   

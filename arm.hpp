@@ -16,37 +16,30 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef navigate_hpp
-#define navigate_hpp
+#ifndef arm_hpp
+#define arm_hpp
 
 /* Include Required Libraries */
 #include <Arduino.h>
 #include <Servo.h>
-#include "remote.hpp"
 
-/* Define Required Macros */
-#define ULSONIC_SWEEP_MIN false
-#define ULSONIC_SWEEP_MAX true
-
-/* Define Required Strcuts */
-struct Vision {
-  /* ulsonic_pins: [Sensor Count][Pwr, Tx, Rx] */
-  int ulsonic_pins[1][3];
-  Servo ulsonic_sweep;
-  Remote* remote;
+/* Define Required Structs */
+struct ArmComponents {
+  int ActuatorPin; /* Arm Actuator Servo */
+  int SignalPosPin; /* Singal Measure +ve Pin */
+  int MagnetInfPin; /* Magnet Detect Info Pin */
 };
 
-/* Define Class */
-class Navigate {
+/* Define Required Classes */
+class Arm {
   private:
-    Vision vision;
-  
+    Servo arm_actuator;
+    ArmComponents armc;
+
   public:
-    Navigate(Vision vision_obj);
-    long ulsonic_read(int sensor_index);
-    int Navigate::ulsonic_sweep(int sensor_index, bool type);
-    RemoteCoords get_position(Remote *remote);
-    void mission_site(Remote *remote, Drive *drive);
+    Arm(ArmComponents armc_object);
+    void deploy(int percent);
+    int read_dcycle();
 };
 
 #endif

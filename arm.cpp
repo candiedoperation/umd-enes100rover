@@ -16,37 +16,30 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef navigate_hpp
-#define navigate_hpp
-
 /* Include Required Libraries */
-#include <Arduino.h>
-#include <Servo.h>
-#include "remote.hpp"
+#include "arm.hpp"
 
-/* Define Required Macros */
-#define ULSONIC_SWEEP_MIN false
-#define ULSONIC_SWEEP_MAX true
-
-/* Define Required Strcuts */
-struct Vision {
-  /* ulsonic_pins: [Sensor Count][Pwr, Tx, Rx] */
-  int ulsonic_pins[1][3];
-  Servo ulsonic_sweep;
-  Remote* remote;
-};
-
-/* Define Class */
-class Navigate {
-  private:
-    Vision vision;
+Arm::Arm(ArmComponents armc_object) {
+  /* Update the Private Variable */
+  armc = armc_object;
   
-  public:
-    Navigate(Vision vision_obj);
-    long ulsonic_read(int sensor_index);
-    int Navigate::ulsonic_sweep(int sensor_index, bool type);
-    RemoteCoords get_position(Remote *remote);
-    void mission_site(Remote *remote, Drive *drive);
-};
+  /* Initialize the Pins */
+  arm_actuator.attach(armc.ActuatorPin);
+  pinMode(armc.SignalPosPin, INPUT);
+  pinMode(armc.MagnetInfPin, INPUT);
+}
 
-#endif
+int Arm::read_dcycle() {
+  /* Define Required Variables */
+  int cycletime_high, cycletime_low;
+  cycletime_high = pulseIn(armc.SignalPosPin, HIGH);
+  cycletime_low = pulseIn(armc.SignalPosPin, LOW);
+
+  /* Return Duty Cycle */
+  int duty_cycle = ((cycletime_high / (cycletime_high + cycletime_low)) * 100);
+  return duty_cycle;
+}
+
+void Arm::deploy(int percent) {
+
+}

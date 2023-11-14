@@ -41,13 +41,9 @@ class Drive {
   public:
     Drive(Propel propulsion);
     void brake();
-    void forward(int distance);
-    void backward(int distance);
+    void forward(int speed);
+    void backward(int speed);
     void angled(float theta);
-
-    /* Side Skid Functions */
-    void backright();
-    void frontright();
 };
 
 #endif

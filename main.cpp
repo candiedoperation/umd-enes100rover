@@ -18,6 +18,7 @@
 
 /* Include Headers */
 #include "main.hpp"
+#include "arm.hpp"
 #include "drive.hpp"
 #include "navigate.hpp"
 #include "remote.hpp"
@@ -31,17 +32,17 @@ void Main::initialize() {
 
   /* Define Propulsion Pins */
   struct Propel propulsion = {
-    {10, 11}, //10LF, 11LB
-    {6, 7}, //6LF, 7LB
-    {12, 13}, //12RF, 13RB
-    {8, 9} //8RF, 9RB
+    {9, 10}, //10LF, 11LB
+    {4, 5}, //6LF, 7LB
+    {11, 12}, //12RF, 13RB
+    {6, 7} //8RF, 9RB
   };
   
   /* Define Origin Data */
   struct Origin origin = {
     "Ein, the Data Dog!",
     DATA,
-    5, /* 58 is the Mascot */
+    11, /* 58 is the Mascot */
     52,
     50
   };
@@ -63,13 +64,19 @@ void Main::initialize() {
   /* Initialize the Drive Object */
   Drive drive(propulsion);
 
+  /* Test */
+  int ang = navigate.ulsonic_sweep(0, ULSONIC_SWEEP_MIN);
+  Serial.println("Minimum Dist at: ");
+  Serial.print(ang);
+  drive.angled(ang);
+
   /* Initialize Remote */
   Remote remote(origin, &Enes100);
   Enes100.println("Hello! I'm Ein, the Data Dog!");
 
   /* Initialize Navigation */
-  delay(800);
-  navigate.mission_site(&remote, &drive);
+  //delay(800);
+  //navigate.mission_site(&remote, &drive);
 
   while (1 == 1) {
     //navigate.ulsonic_ping(0);
