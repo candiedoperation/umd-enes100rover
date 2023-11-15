@@ -58,6 +58,24 @@ void Main::initialize() {
     NULL
   };
 
+  /* Define Arm Data */
+  struct ArmComponents armc = {
+    3, /* Arm Servo Pin */
+    A0, /* Signal Input Pin */
+    A1 /* Magnetic Hall Sensor */
+  };
+
+  /* Initialize Arm */
+  Arm arm(armc);
+  //arm.deploy(100);
+  delay(2500);
+
+  Serial.print("Duty Cycle: ");
+  Serial.println(arm.read_dcycle());
+
+  //delay(3500);
+  //arm.deploy(0);
+
   /* Initialize Navigation */
   Navigate navigate(vision);
 
@@ -65,10 +83,10 @@ void Main::initialize() {
   Drive drive(propulsion);
 
   /* Test */
-  int ang = navigate.ulsonic_sweep(0, ULSONIC_SWEEP_MIN);
-  Serial.println("Minimum Dist at: ");
-  Serial.print(ang);
-  drive.angled(ang);
+  //int ang = navigate.ulsonic_sweep(0, ULSONIC_SWEEP_MIN);
+  //Serial.println("Minimum Dist at: ");
+  //Serial.print(ang);
+  //drive.angled(ang);
 
   /* Initialize Remote */
   Remote remote(origin, &Enes100);

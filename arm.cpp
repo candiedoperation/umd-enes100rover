@@ -27,19 +27,35 @@ Arm::Arm(ArmComponents armc_object) {
   arm_actuator.attach(armc.ActuatorPin);
   pinMode(armc.SignalPosPin, INPUT);
   pinMode(armc.MagnetInfPin, INPUT);
+
+  /* Retract the Arm */
+  arm_actuator.write(180);
+  delay(50);
 }
 
 int Arm::read_dcycle() {
   /* Define Required Variables */
-  int cycletime_high, cycletime_low;
+  double cycletime_high, cycletime_low;
   cycletime_high = pulseIn(armc.SignalPosPin, HIGH);
   cycletime_low = pulseIn(armc.SignalPosPin, LOW);
 
   /* Return Duty Cycle */
-  int duty_cycle = ((cycletime_high / (cycletime_high + cycletime_low)) * 100);
-  return duty_cycle;
+  double duty_cycle = ((cycletime_high / (cycletime_high + cycletime_low)) * 100);
+  return (int) duty_cycle;
 }
 
 void Arm::deploy(int percent) {
+  int dest = (180 - ((percent/100) * 95));
+  if (dest <= 180 && dest >= 85) {
+    /* Retract the Arm */
+    for (int pos = arm_actuator.read(); pos <= 180; pos += 1) {
+      arm_actuator.write(pos);
+      delay(50);
+    }
 
+    for (int pos = 180; pos >= dest; pos -= 1) {
+      arm_actuator.write(pos);
+      delay(50);
+    }
+  }
 }
