@@ -28,6 +28,7 @@ struct ArmComponents {
   int ActuatorPin; /* Arm Actuator Servo */
   int SignalPosPin; /* Singal Measure +ve Pin */
   int MagnetInfPin; /* Magnet Detect Info Pin */
+  void *MagnetInterrupt; /* Interrupt for Magnet Detection */
 };
 
 /* Define Required Classes */
@@ -40,6 +41,7 @@ class Arm {
     Arm(ArmComponents armc_object);
     void deploy(int percent);
     int read_dcycle();
+    bool detect_magnet();
 };
 
 #endif

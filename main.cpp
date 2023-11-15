@@ -62,19 +62,28 @@ void Main::initialize() {
   struct ArmComponents armc = {
     3, /* Arm Servo Pin */
     A0, /* Signal Input Pin */
-    A1 /* Magnetic Hall Sensor */
+    8, /* Magnetic Hall Sensor */
   };
 
   /* Initialize Arm */
   Arm arm(armc);
-  //arm.deploy(100);
+  arm.deploy(100);
   delay(2500);
 
-  Serial.print("Duty Cycle: ");
-  Serial.println(arm.read_dcycle());
+  for (int i = 0; i < 5; i++) {
+    Serial.print("DUTY CYCLE: ");
+    Serial.println(arm.read_dcycle());
+    Serial.print("MAGNET PRESENCE: ");
+    Serial.println(arm.detect_magnet());
+    Serial.println("");
+    delay(250);
+  }
 
-  //delay(3500);
-  //arm.deploy(0);
+  //Serial.print("Duty Cycle: ");
+  //Serial.println(arm.read_dcycle());
+
+  delay(2500);
+  arm.deploy(0);
 
   /* Initialize Navigation */
   Navigate navigate(vision);

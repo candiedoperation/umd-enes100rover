@@ -33,6 +33,11 @@ Arm::Arm(ArmComponents armc_object) {
   delay(50);
 }
 
+bool Arm::detect_magnet() {
+  /* Read the Magnetic Hall Sensor Pin */
+  return (digitalRead(armc.MagnetInfPin) == 0) ? true : false;
+}
+
 int Arm::read_dcycle() {
   /* Define Required Variables */
   double cycletime_high, cycletime_low;
@@ -45,8 +50,8 @@ int Arm::read_dcycle() {
 }
 
 void Arm::deploy(int percent) {
-  int dest = (180 - ((percent/100) * 95));
-  if (dest <= 180 && dest >= 85) {
+  int dest = (180 - ((percent/100) * 85));
+  if (dest <= 180 && dest >= 95) {
     /* Retract the Arm */
     for (int pos = arm_actuator.read(); pos <= 180; pos += 1) {
       arm_actuator.write(pos);
