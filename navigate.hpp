@@ -28,6 +28,12 @@
 #define ULSONIC_SWEEP_MIN false
 #define ULSONIC_SWEEP_MAX true
 
+/* Define Required Constants */
+const double LANE_LEFTWEST = 1.75;
+const double LANE_LEFTEAST = 1.35;
+const double LANE_RIGHTWEST = 0.83;
+const double LANE_RIGHTEAST = 0.29;
+
 /* Define Required Strcuts */
 struct Vision {
   /* ulsonic_pins: [Sensor Count][Pwr, Tx, Rx] */
@@ -43,8 +49,12 @@ class Navigate {
   
   public:
     Navigate(Vision vision_obj);
+    void precision_turn(Remote *remote, Drive *drive, float angle);
+    void obstacle_avoid(Remote *remote, Drive *drive);
+    int get_lane(Remote *remote);
+    void set_lane(Remote *remote, Drive *drive, int lane);
     long ulsonic_read(int sensor_index);
-    int Navigate::ulsonic_sweep(int sensor_index, bool type);
+    int ulsonic_sweep(int sensor_index, bool type);
     RemoteCoords get_position(Remote *remote);
     void mission_site(Remote *remote, Drive *drive);
 };

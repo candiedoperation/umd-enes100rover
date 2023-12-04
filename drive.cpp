@@ -76,15 +76,18 @@ void Drive::angled(float theta) {
   const long TURN_CALIBRATION = 22.444444; 
   int pwm_speed = middleware.pwmp_parse(30);
 
-  /* Power Direction Pins */
-  for (int pin : propulsion.leftDriveDirection) { digitalWrite(pin, (theta > 0) ? LOW : HIGH); }
-  for (int pin : propulsion.rightDriveDirection) { digitalWrite(pin, (theta > 0) ? LOW : HIGH); }
+  /* Set Definition Limits */
+  if (theta >= -180 && theta <= 180) {
+    /* Power Direction Pins */
+    for (int pin : propulsion.leftDriveDirection) { digitalWrite(pin, (theta > 0) ? LOW : HIGH); }
+    for (int pin : propulsion.rightDriveDirection) { digitalWrite(pin, (theta > 0) ? LOW : HIGH); }
 
-  /* Power Drive Pins */
-  for (int pin : propulsion.leftDrivePWM) { analogWrite(pin, pwm_speed); }
-  for (int pin : propulsion.rightDrivePWM) { analogWrite(pin, pwm_speed); }
+    /* Power Drive Pins */
+    for (int pin : propulsion.leftDrivePWM) { analogWrite(pin, pwm_speed); }
+    for (int pin : propulsion.rightDrivePWM) { analogWrite(pin, pwm_speed); }
 
-  /* Stop Driving after Turn Completion */
-  delay(TURN_CALIBRATION * abs(theta));
-  this->brake();
+    /* Stop Driving after Turn Completion */
+    delay(TURN_CALIBRATION * abs(theta));
+    this->brake();
+  }
 }

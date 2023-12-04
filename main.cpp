@@ -42,7 +42,7 @@ void Main::initialize() {
   struct Origin origin = {
     "Ein, the Data Dog!",
     DATA,
-    11, /* 58 is the Mascot */
+    19, /* 58 is the Mascot */
     52,
     50
   };
@@ -68,9 +68,10 @@ void Main::initialize() {
   /* Initialize Arm */
   Arm arm(armc);
   arm.deploy(100);
-  delay(2500);
+  delay(500);
+  arm.deploy(0);
 
-  for (int i = 0; i < 5; i++) {
+  /*for (int i = 0; i < 5; i++) {
     Serial.print("DUTY CYCLE: ");
     Serial.println(arm.read_dcycle());
     Serial.print("MAGNET PRESENCE: ");
@@ -79,8 +80,8 @@ void Main::initialize() {
     delay(250);
   }
 
-  //Serial.print("Duty Cycle: ");
-  //Serial.println(arm.read_dcycle());
+  Serial.print("Duty Cycle: ");
+  Serial.println(arm.read_dcycle());
 
   delay(2500);
   arm.deploy(0);
@@ -92,18 +93,19 @@ void Main::initialize() {
   Drive drive(propulsion);
 
   /* Test */
-  //int ang = navigate.ulsonic_sweep(0, ULSONIC_SWEEP_MIN);
-  //Serial.println("Minimum Dist at: ");
-  //Serial.print(ang);
-  //drive.angled(ang);
+  /*int ang = navigate.ulsonic_sweep(0, ULSONIC_SWEEP_MIN);
+  Serial.println("Minimum Dist at: ");
+  Serial.print(ang);
+  drive.angled(ang);*/
 
   /* Initialize Remote */
   Remote remote(origin, &Enes100);
   Enes100.println("Hello! I'm Ein, the Data Dog!");
 
   /* Initialize Navigation */
-  //delay(800);
+  delay(800);
   //navigate.mission_site(&remote, &drive);
+  navigate.obstacle_avoid(&remote, &drive);
 
   while (1 == 1) {
     //navigate.ulsonic_ping(0);

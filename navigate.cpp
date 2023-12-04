@@ -63,7 +63,7 @@ int Navigate::ulsonic_sweep(int sensor_index, bool type) {
   
   /* Center the Servo */
   vision.ulsonic_sweep.write(180);
-  delay(200);
+  delay(100);
 
   for (int pos = 180; pos >= 0; pos -= 1) {
     vision.ulsonic_sweep.write(pos);
@@ -99,6 +99,141 @@ RemoteCoords Navigate::get_position(Remote *remote) {
   rmc.XY = (remote->backend->getTheta()) * 57.2958; /* Convert Rads to Degrees */
 
   return rmc;
+}
+
+int Navigate::get_lane(Remote *remote) {
+  float pos_y = this->get_position(remote).Y;
+  if (pos_y >= LANE_LEFTEAST && pos_y <= LANE_LEFTWEST) {
+    /* Lane 1, Leftmost Lane */
+    return 1;
+  } else if (pos_y > LANE_RIGHTWEST && pos_y < LANE_LEFTEAST) {
+    /* Lane 2, Middle Lane */
+    return 2;
+  } else if (pos_y >= LANE_RIGHTEAST && pos_y <= LANE_RIGHTWEST) {
+    /* Lane 3, Rightmost Lane */
+    return 3;
+  } else {
+    /* False Case */
+    return NULL;
+  }
+}
+
+void Navigate::set_lane(Remote *remote, Drive *drive, int lane) {
+  /* Orient Straight */
+  delay(500);
+  drive->angled(this->get_position(remote).XY);
+
+  if (lane == 1 && this->get_lane(remote) != 1) {
+    /* Calculate Lane Average */
+    float lane_avg = (LANE_LEFTEAST + LANE_LEFTWEST) / 2;
+
+    /* Orient Towards Lane Path */
+    if (this->get_position(remote).Y < lane_avg) { this->precision_turn(remote, drive, 60); }
+    else { this->precision_turn(remote, drive, -60); }
+
+    /* Move Forward Until Lane Center is Reached */
+    delay(500);
+    while (this->get_position(remote).Y < (lane_avg - 0.2)) {
+        drive->forward(25);
+        delay(150);
+        drive->brake();
+    }
+
+    /* Orient Straight */
+    delay(500);
+    drive->angled(this->get_position(remote).XY);
+  } else if (lane == 2 && this->get_lane(remote) != 2) {
+    /* Calculate Lane Average */
+    float lane_avg = (LANE_LEFTEAST + LANE_RIGHTWEST) / 2;
+
+    /* Orient Towards Lane Path */
+    if (this->get_position(remote).Y < lane_avg) { this->precision_turn(remote, drive, 60); }
+    else { this->precision_turn(remote, drive, -60); }
+
+    /* Move Forward Until Lane Center is Reached */
+    delay(500);
+    while (abs(this->get_position(remote).Y - lane_avg) > 0.03) {
+        drive->forward(25);
+        delay(150);
+        drive->brake();
+    }
+
+    /* Orient Straight */
+    delay(500);
+    drive->angled(this->get_position(remote).XY);
+  } else if (lane == 3 && this->get_lane(remote) != 3) {
+    /* Calculate Lane Average */
+    float lane_avg = (LANE_RIGHTEAST + LANE_RIGHTWEST) / 2;
+
+    /* Orient Towards Lane Path */
+    if (this->get_position(remote).Y < lane_avg) { this->precision_turn(remote, drive, 60); }
+    else { this->precision_turn(remote, drive, -60); }
+
+    /* Move Forward Until Lane Center is Reached */
+    delay(500);
+    while (this->get_position(remote).Y > (lane_avg + 0.2)) {
+        drive->forward(25);
+        delay(150);
+        drive->brake();
+    }
+
+    /* Orient Straight */
+    delay(500);
+    drive->angled(this->get_position(remote).XY);
+  }
+}
+
+void Navigate::obstacle_avoid(Remote *remote, Drive *drive) {
+    /* Orient Straight, facing Concrete Blocks */
+    delay(500);
+    drive->angled(this->get_position(remote).XY);
+
+    /* Test */
+    //this->set_lane(remote, drive, 3);
+    //delay(1000);
+    //this->set_lane(remote, drive, 1);
+    //delay(1000);
+    //this->set_lane(remote, drive, 2);
+
+    while (this->get_position(remote).X < 2.7) {
+      /* Perform Obstacle Avoidance Until System reaches Log */
+      
+      /* Test */
+      //Serial.print("Lane ");
+      //Serial.println(this->get_lane(remote));
+
+      while (this->ulsonic_read(0) > 10 && this->get_position(remote).X < 2.7) {
+        drive->forward(50);
+        delay(30);
+        drive->brake();
+      }
+
+      /*
+        Obstacle Detected,
+        Apply Obstacle Avoidance Logic:
+          - Move to Lane 1, Check Obstacle
+          - Move to Lane 2, Check Obstacle
+          - Move to Lane 3, Check Obstacle
+      */
+
+      /* Either Lanes would be free */
+      if (this->ulsonic_read(0) <= 10) { this->set_lane(remote, drive, 1); delay(1000); }
+      if (this->ulsonic_read(0) <= 10) { this->set_lane(remote, drive, 2); delay(1000); }
+      if (this->ulsonic_read(0) <= 10) { this->set_lane(remote, drive, 3); delay(1000); }
+
+      /* Set Loop Delay to 300ms */
+      delay(300);
+    }
+}
+
+void Navigate::precision_turn(Remote *remote, Drive *drive, float angle) {
+  const int PRECISION_TURN_LIMIT = 8;
+  int precision_turns = 0;
+  while ((precision_turns <= PRECISION_TURN_LIMIT) && (this->get_position(remote).XY < (angle - 0.5) || this->get_position(remote).XY > (angle + 0.5))) {
+    precision_turns++;
+    drive->angled(this->get_position(remote).XY - angle);
+    delay(350);
+  }
 }
 
 void Navigate::mission_site(Remote *remote, Drive *drive) {
@@ -181,15 +316,6 @@ void Navigate::mission_site(Remote *remote, Drive *drive) {
     /* Use Ultrasonic Sensor Precision */
     int min_angle = this->ulsonic_sweep(0, ULSONIC_SWEEP_MIN);
     drive->angled(min_angle);
-
-    /* Orient Straight, facing Concrete Blocks */
-    //drive->angled(this->get_position(remote).XY - 0);
-
-    /*while (this->get_position(remote).Y < 1.84) {
-      drive->forward(20);
-      delay(150);
-      drive->brake();
-    }*/
 
     /* Check which Concrete Block we're closer to and turn opposite */
     /*rmc = this->get_position(remote);

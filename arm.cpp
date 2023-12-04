@@ -50,17 +50,17 @@ int Arm::read_dcycle() {
 }
 
 void Arm::deploy(int percent) {
-  int dest = (180 - ((percent/100) * 85));
-  if (dest <= 180 && dest >= 95) {
+  int dest = (180 - ((percent/100) * 90));
+  if (dest <= 180 && dest >= 90) {
     /* Retract the Arm */
     for (int pos = arm_actuator.read(); pos <= 180; pos += 1) {
       arm_actuator.write(pos);
-      delay(50);
+      delay(25);
     }
 
     for (int pos = 180; pos >= dest; pos -= 1) {
       arm_actuator.write(pos);
-      delay(50);
+      delay(25);
     }
   }
 }
