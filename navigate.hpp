@@ -51,6 +51,7 @@ class Navigate {
     Navigate(Vision vision_obj);
     void precision_turn(Remote *remote, Drive *drive, float angle);
     void obstacle_avoid(Remote *remote, Drive *drive);
+    void end_site(Remote *remote, Drive *drive);
     int get_lane(Remote *remote);
     void set_lane(Remote *remote, Drive *drive, int lane);
     long ulsonic_read(int sensor_index);

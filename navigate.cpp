@@ -128,8 +128,8 @@ void Navigate::set_lane(Remote *remote, Drive *drive, int lane) {
     float lane_avg = (LANE_LEFTEAST + LANE_LEFTWEST) / 2;
 
     /* Orient Towards Lane Path */
-    if (this->get_position(remote).Y < lane_avg) { this->precision_turn(remote, drive, 60); }
-    else { this->precision_turn(remote, drive, -60); }
+    if (this->get_position(remote).Y < lane_avg) { this->precision_turn(remote, drive, 90); }
+    else { this->precision_turn(remote, drive, -90); }
 
     /* Move Forward Until Lane Center is Reached */
     delay(500);
@@ -147,8 +147,8 @@ void Navigate::set_lane(Remote *remote, Drive *drive, int lane) {
     float lane_avg = (LANE_LEFTEAST + LANE_RIGHTWEST) / 2;
 
     /* Orient Towards Lane Path */
-    if (this->get_position(remote).Y < lane_avg) { this->precision_turn(remote, drive, 60); }
-    else { this->precision_turn(remote, drive, -60); }
+    if (this->get_position(remote).Y < lane_avg) { this->precision_turn(remote, drive, 90); }
+    else { this->precision_turn(remote, drive, -90); }
 
     /* Move Forward Until Lane Center is Reached */
     delay(500);
@@ -166,12 +166,12 @@ void Navigate::set_lane(Remote *remote, Drive *drive, int lane) {
     float lane_avg = (LANE_RIGHTEAST + LANE_RIGHTWEST) / 2;
 
     /* Orient Towards Lane Path */
-    if (this->get_position(remote).Y < lane_avg) { this->precision_turn(remote, drive, 60); }
-    else { this->precision_turn(remote, drive, -60); }
+    if (this->get_position(remote).Y < lane_avg) { this->precision_turn(remote, drive, 90); }
+    else { this->precision_turn(remote, drive, -90); }
 
     /* Move Forward Until Lane Center is Reached */
     delay(500);
-    while (this->get_position(remote).Y > (lane_avg + 0.2)) {
+    while (this->get_position(remote).Y > (lane_avg)) {
         drive->forward(25);
         delay(150);
         drive->brake();
@@ -195,16 +195,16 @@ void Navigate::obstacle_avoid(Remote *remote, Drive *drive) {
     //delay(1000);
     //this->set_lane(remote, drive, 2);
 
-    while (this->get_position(remote).X < 2.7) {
+    while (this->get_position(remote).X < 2.4) {
       /* Perform Obstacle Avoidance Until System reaches Log */
       
       /* Test */
       //Serial.print("Lane ");
       //Serial.println(this->get_lane(remote));
 
-      while (this->ulsonic_read(0) > 10 && this->get_position(remote).X < 2.7) {
-        drive->forward(50);
-        delay(30);
+      while (this->ulsonic_read(0) > 7 && this->get_position(remote).X < 2.4) {
+        drive->forward(100);
+        delay(20);
         drive->brake();
       }
 
@@ -217,12 +217,41 @@ void Navigate::obstacle_avoid(Remote *remote, Drive *drive) {
       */
 
       /* Either Lanes would be free */
-      if (this->ulsonic_read(0) <= 10) { this->set_lane(remote, drive, 1); delay(1000); }
-      if (this->ulsonic_read(0) <= 10) { this->set_lane(remote, drive, 2); delay(1000); }
-      if (this->ulsonic_read(0) <= 10) { this->set_lane(remote, drive, 3); delay(1000); }
+      if (this->ulsonic_read(0) <= 7) {
+        this->set_lane(remote, drive, 2); 
+        delay(1000);
+
+        if (this->ulsonic_read(0) <= 7) {
+          this->set_lane(remote, drive, 3); 
+          delay(1000);
+
+          if (this->ulsonic_read(0) <= 7) {
+            this->set_lane(remote, drive, 1); 
+            delay(1000);
+          }
+        }
+      }
 
       /* Set Loop Delay to 300ms */
       delay(300);
+    }
+
+    /* Orient Straight */
+    delay(1000);
+    drive->angled(this->get_position(remote).XY);
+}
+
+void Navigate::end_site(Remote *remote, Drive *drive) {
+    /* Move to Lane 3 */
+    delay(500);
+    this->set_lane(remote, drive, 3);
+
+    /* Move Forward */
+    delay(500);
+    while (this->get_position(remote).X < 3.75) {
+      drive->forward(100);
+      delay(20);
+      drive->brake();
     }
 }
 
@@ -314,52 +343,7 @@ void Navigate::mission_site(Remote *remote, Drive *drive) {
     }
 
     /* Use Ultrasonic Sensor Precision */
-    int min_angle = this->ulsonic_sweep(0, ULSONIC_SWEEP_MIN);
-    drive->angled(min_angle);
-
-    /* Check which Concrete Block we're closer to and turn opposite */
-    /*rmc = this->get_position(remote);
-    if (rmc.Y < 1.00) {
-        Serial.println("Go Left");
-        drive->angled(-90);
-    } else {
-        Serial.println("Go Right");
-        drive->angled(90);
-    }*/
-
-    /* Drive Forward for Delta Distance */
-    /*while (this->get_position(remote).Y <= 1.0) {
-      drive->forward(20);
-      delay(150);
-      drive->brake();
-    }*/
-
-    /* Orient Straight, facing the Logs */
-    //drive->angled(this->get_position(remote).XY - 0);
-
-    /* Drive Forward for Delta Distance */
-    /*while (this->get_position(remote).X <= 2.9) {
-      drive->forward(20);
-      delay(150);
-      drive->brake();
-    }*/
-
-    /* Turn Right for Log */
-    //drive->angled(90);
-
-    /* Move Towards Log Center */
-    /*while (this->get_position(remote).Y <= 0.43) {
-      drive->forward(20);
-      delay(150);
-      drive->brake();
-    }*/
-
-    /* Orient Straight, facing the Log */
-    //drive->angled(this->get_position(remote).XY - 0);
-
-    /* Climb Over Log */
-    /*drive->forward(85);
-    delay(1000);
-    drive->brake();*/
+    //int min_angle = this->ulsonic_sweep(0, ULSONIC_SWEEP_MIN);
+    //drive->angled(min_angle);
   }
 }

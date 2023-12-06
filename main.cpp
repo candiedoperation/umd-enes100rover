@@ -42,7 +42,7 @@ void Main::initialize() {
   struct Origin origin = {
     "Ein, the Data Dog!",
     DATA,
-    19, /* 58 is the Mascot */
+    12, /* 58 is the Mascot */
     52,
     50
   };
@@ -67,8 +67,6 @@ void Main::initialize() {
 
   /* Initialize Arm */
   Arm arm(armc);
-  arm.deploy(100);
-  delay(500);
   arm.deploy(0);
 
   /*for (int i = 0; i < 5; i++) {
@@ -104,8 +102,21 @@ void Main::initialize() {
 
   /* Initialize Navigation */
   delay(800);
-  //navigate.mission_site(&remote, &drive);
+  navigate.mission_site(&remote, &drive);
+
+  /* Perform Mission */
+  arm.deploy(100);
+  delay(1500);
+  Enes100.print("Duty Cycle: ");
+  Enes100.println(arm.read_dcycle());
+  Enes100.print("Magnet Precense: ");
+  Enes100.println(arm.detect_magnet());
+  delay(500);
+  arm.deploy(0);
+
+  delay(1000);
   navigate.obstacle_avoid(&remote, &drive);
+  navigate.end_site(&remote, &drive);
 
   while (1 == 1) {
     //navigate.ulsonic_ping(0);
